@@ -2,14 +2,20 @@ import { BarChart3, FileStack, LineChart } from "lucide-react";
 import { Section } from "../../../components/ui/section";
 import { PlaceholderBlock } from "../../../components/ui/placeholder-block";
 
-function ToggleButton({ icon: Icon, active = false }: { icon: typeof BarChart3; active?: boolean }) {
+function ToggleButton({
+  icon: Icon,
+  active = false,
+}: {
+  icon: typeof BarChart3;
+  active?: boolean;
+}) {
   return (
     <button
       type="button"
-      className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl border ${
+      className={`inline-flex h-12 w-12 items-center justify-center rounded-lg border ${
         active
-          ? "border-blue-100 bg-[var(--brand-soft)] text-[var(--brand)]"
-          : "border-[var(--line)] bg-white text-slate-400"
+          ? "border-blue-100 bg-(--brand-soft) text-(--brand)"
+          : "border-(--line) bg-white text-slate-400"
       }`}
       aria-pressed={active}
     >
@@ -23,26 +29,27 @@ export function FileSharingCard() {
     <Section
       title="File Sharing"
       icon={FileStack}
+      infoText="Keep track of files and how they're shared"
       action={
         <div className="hidden items-center gap-3 md:flex">
           <ToggleButton icon={BarChart3} active />
           <ToggleButton icon={LineChart} />
           <button
             type="button"
-            className="inline-flex h-12 items-center gap-3 rounded-2xl border border-[var(--line)] bg-white px-5 text-sm font-medium text-slate-500"
+            className="inline-flex h-12 items-center gap-3 rounded-2xl border border-(--line) bg-white px-5 text-sm font-medium text-slate-500"
           >
             Month
           </button>
         </div>
       }
     >
-      <p className="text-sm text-slate-500">
-        Keep track of files and how they&apos;re shared
-      </p>
-
-      <div className="mt-6 space-y-4">
-        <PlaceholderBlock className="h-[280px] xl:h-[310px] 2xl:h-[330px]" label="Bar chart placeholder" tone="brand" />
-        <div className="flex flex-wrap gap-6 text-sm font-medium text-slate-600">
+      <div className="mt-1 space-y-8">
+        <PlaceholderBlock
+          className="h-70 xl:h-77.5 2xl:h-82.5"
+          label="Bar chart placeholder"
+          tone="brand"
+        />
+        <div className="flex flex-wrap items-center justify-center  gap-6 text-sm font-medium text-slate-600">
           <div className="flex items-center gap-2">
             <span className="h-3.5 w-3.5 rounded bg-indigo-700" />
             Public

@@ -93,11 +93,16 @@ export const storageLegend: StorageLegendItem[] = [
 ];
 
 export const activeUserRegions: RegionUsageItem[] = [
-  { label: "United Kingdom", progress: 78, tone: "bg-lime-500", badge: "UK" },
-  { label: "Nigeria", progress: 61, tone: "bg-emerald-500", badge: "NG" },
-  { label: "UAE", progress: 45, tone: "bg-teal-500", badge: "AE" },
-  { label: "Canada", progress: 59, tone: "bg-rose-500", badge: "CA" },
-  { label: "United States of America", progress: 78, tone: "bg-blue-500", badge: "US" },
+  { label: "United Kingdom", progress: 78, tone: "bg-[#66c124]", badge: "UK" },
+  { label: "Nigeria", progress: 61, tone: "bg-[#66c124]", badge: "NG" },
+  { label: "UAE", progress: 45, tone: "bg-[#66c124]", badge: "AE" },
+  { label: "Canada", progress: 59, tone: "bg-[#66c124]", badge: "CA" },
+  {
+    label: "United States of America",
+    progress: 78,
+    tone: "bg-[#66c124]",
+    badge: "US",
+  },
 ];
 
 export const deviceMetrics: MetricCardData[] = [

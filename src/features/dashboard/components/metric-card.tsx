@@ -18,7 +18,7 @@ export function MetricCard({ metric }: MetricCardProps) {
         <div className="flex items-center gap-2">
           <IconWrapper
             icon={metric.icon}
-            className="w-6! h-6! p-1! rounded-sm!"
+            className="w-9! h-9! p-1! rounded-lg!"
           />
           <h3 className="text-md font-medium tracking-[-0.03em] text-[#3d3d3d]">
             {metric.title}
@@ -28,8 +28,19 @@ export function MetricCard({ metric }: MetricCardProps) {
         <div className="flex items-center xl:justify-between w-full mt-3">
           <div>
             <div className=" flex items-center gap-2">
-              <span className="text-[1.8rem] xl:text-[1.3rem] font-semibold tracking-[-0.04em] text-[#3d3d3d] 2xl:text-[1.95rem]">
-                {metric.value}
+              <span className="text-[1.8rem] font-semibold tracking-[-0.04em] xl:text-[1.3rem]">
+                {metric.value.split(" ").length === 2 ? (
+                  <>
+                    <span className="text-[#3d3d3d]">
+                      {metric.value.split(" ")[0]}
+                    </span>{" "}
+                    <span className="text-[#6d6d6d] font-light">
+                      {metric.value.split(" ")[1]}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-[#3d3d3d]">{metric.value}</span>
+                )}
               </span>
               <span
                 className={cn(
@@ -46,7 +57,7 @@ export function MetricCard({ metric }: MetricCardProps) {
               </span>
             </div>
 
-            <p className="mt-3 text-sm xl:text-[10px] text-[#3d3d3d]">
+            <p className="mt-3 text-sm xl:text-[12px] text-[#3d3d3d]">
               {metric.caption}
             </p>
           </div>

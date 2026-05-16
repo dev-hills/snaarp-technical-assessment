@@ -7,7 +7,7 @@ type TopNavbarProps = {
 
 export function TopNavbar({ onMenuClick }: TopNavbarProps) {
   return (
-    <header className="sticky top-0 z-20 bg-[linear-gradient(180deg,rgba(244,246,251,0.96),rgba(244,246,251,0.82))] px-3 py-3 backdrop-blur md:px-4 lg:px-2">
+    <header className="sticky top-0 z-20  px-3 pb-3 backdrop-blur md:px-4 lg:px-2">
       <PageContainer>
         <div className="flex flex-col gap-3 rounded-xl border border-(--line) bg-white p-3 shadow-[0_10px_24px_rgba(15,23,42,0.04)] lg:flex-row lg:items-center lg:justify-between lg:px-4 lg:py-2.5">
           <div className="flex items-center gap-3">

@@ -24,7 +24,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-transparent">
+    <div className="flex min-h-screen bg-[#f6f6f6]  p-3">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 min-w-0 w-full">
         <TopNavbar onMenuClick={() => setSidebarOpen(true)} />

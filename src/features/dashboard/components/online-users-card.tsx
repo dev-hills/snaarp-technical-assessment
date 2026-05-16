@@ -1,7 +1,14 @@
 import { ChevronDown, UserRound } from "lucide-react";
 import { Section } from "../../../components/ui/section";
 
-const columns = ["Name", "Location", "Organization", "Device", "Current Activity", "Time Usage"];
+const columns = [
+  "Name",
+  "Location",
+  "Organization",
+  "Device",
+  "Current Activity",
+  "Time Usage",
+];
 
 export function OnlineUsersCard() {
   return (
@@ -11,17 +18,16 @@ export function OnlineUsersCard() {
       action={
         <button
           type="button"
-          className="hidden items-center gap-3 rounded-2xl border border-[var(--line)] bg-white px-5 py-3 text-sm font-medium text-slate-500 md:inline-flex"
+          className="hidden items-center gap-3 rounded-2xl border border-(--line) bg-white px-5 py-3 text-sm font-medium text-slate-500 md:inline-flex"
         >
           All Organization
           <ChevronDown className="h-4 w-4" />
         </button>
       }
+      infoText="View your comprehensive online users"
     >
-      <p className="text-sm text-slate-500">View your comprehensive online users</p>
-
-      <div className="mt-6 overflow-hidden rounded-[24px] border border-[var(--line)] bg-white">
-        <div className="hidden grid-cols-[1.3fr_1fr_1fr_1fr_1.2fr_1fr] gap-4 bg-slate-100/90 px-5 py-3.5 text-sm font-semibold text-slate-600 lg:grid">
+      <div className="mt-6 overflow-hidden rounded-lg border border-(--line) bg-white">
+        <div className="hidden grid-cols-[1.3fr_1fr_1fr_1fr_1.2fr_1fr] gap-4 bg-[#e7e7e7] px-5 py-3.5 text-sm font-semibold text-[#3d3d3d] lg:grid">
           {columns.map((column) => (
             <div key={column}>{column}</div>
           ))}
@@ -31,7 +37,7 @@ export function OnlineUsersCard() {
           {Array.from({ length: 8 }).map((_, index) => (
             <div
               key={index}
-              className="grid gap-3 rounded-[20px] border border-[var(--line)] bg-[var(--panel-muted)] p-3.5 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1.2fr_1fr] lg:items-center"
+              className="grid gap-3 rounded-[20px] border border-(--line) bg-(--panel-muted) p-3.5 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1.2fr_1fr] lg:items-center"
             >
               {columns.map((column, columnIndex) => (
                 <div key={`${column}-${columnIndex}`} className="space-y-2">

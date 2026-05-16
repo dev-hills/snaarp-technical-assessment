@@ -11,7 +11,7 @@ export function StorageCard({ legend }: StorageCardProps) {
   return (
     <Card className="p-4 sm:p-5 xl:p-3">
       <div className="flex items-center gap-3">
-        <IconWrapper icon={HardDrive} className="h-10 w-10 rounded-2xl" />
+        <IconWrapper icon={HardDrive} className="h-9! w-9! rounded-2xl" />
         <h3 className="text-lg font-medium tracking-[-0.03em] text-[#3d3d3d]">
           Storage
         </h3>
