@@ -1,9 +1,25 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+} from "recharts";
 import type { MetricCardData } from "../../../types/dashboard";
 import { Card } from "../../../components/ui/card";
 import { IconWrapper } from "../../../components/ui/icon-wrapper";
-import { PlaceholderBlock } from "../../../components/ui/placeholder-block";
 import { cn } from "../../../utils/cn";
+
+// Generate smooth trend data based on trend direction
+function generateSparklineData(trend: "up" | "down"): { value: number }[] {
+  const base = trend === "up" ? 50 : 70;
+  const data = [];
+  for (let i = 0; i < 12; i++) {
+    const variation = Math.sin(i * 0.8) * 15 + Math.random() * 10;
+    const trendOffset = trend === "up" ? i * 2 : -i * 2;
+    data.push({ value: Math.max(10, Math.min(90, base + variation + trendOffset)) });
+  }
+  return data;
+}
 
 type MetricCardProps = {
   metric: MetricCardData;
@@ -11,6 +27,8 @@ type MetricCardProps = {
 
 export function MetricCard({ metric }: MetricCardProps) {
   const positive = metric.trend === "up";
+
+  const gradientId = `gradient-${metric.title.replace(/\s+/g, "-").toLowerCase()}`;
 
   return (
     <Card className="overflow-hidden p-4 sm:p-5 xl:p-3">
@@ -62,11 +80,32 @@ export function MetricCard({ metric }: MetricCardProps) {
             </p>
           </div>
 
-          <PlaceholderBlock
-            tone={positive ? "success" : "danger"}
-            className="w-[45%] h-20"
-            label="Placeholder"
-          />
+          <div className="h-20 w-[45%]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={generateSparklineData(metric.trend)}>
+                <defs>
+                  <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="0%"
+                      stopColor={positive ? "#e1fabe" : "#ffd8cc"}
+                      stopOpacity={0.9}
+                    />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity={0.9} />
+                  </linearGradient>
+                </defs>
+
+                <Area
+                  type="monotone"
+                  dataKey="value"
+                  stroke={positive ? "#84cc16" : "#f43f5e"}
+                  fill={`url(#${gradientId})`}
+                  strokeWidth={2}
+                  dot={false}
+                  activeDot={false}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </Card>

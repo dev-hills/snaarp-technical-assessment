@@ -58,7 +58,7 @@ export function DashboardPage() {
           icon={MonitorCog}
         />
 
-        <section className="grid gap-4 xl:grid-cols-2 xl:items-stretch">
+        <section className="grid gap-4 xl:grid-cols-2  2xl:grid-cols-4 xl:items-stretch">
           <DeviceBreakdownCard
             title={deviceMetrics[0].title}
             icon={deviceMetrics[0].icon}

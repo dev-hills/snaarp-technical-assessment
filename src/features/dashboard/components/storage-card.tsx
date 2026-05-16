@@ -1,7 +1,10 @@
 import { HardDrive, Zap } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Card } from "../../../components/ui/card";
 import { IconWrapper } from "../../../components/ui/icon-wrapper";
+import { ChartTooltip } from "../../../components/charts/chart-tooltip";
 import type { StorageLegendItem } from "../../../types/dashboard";
+import { storageDonutData } from "../../../data/dashboard-charts";
 
 type StorageCardProps = {
   legend: StorageLegendItem[];
@@ -19,13 +22,32 @@ export function StorageCard({ legend }: StorageCardProps) {
 
       <div className="mt-2 grid gap-5 xl:grid-cols-[200px_minmax(0,1fr)] 2xl:grid-cols-[220px_minmax(0,1fr)]">
         <div className="flex flex-col items-center gap-4">
-          <div className="relative grid h-35 w-35 place-items-center rounded-full border border-dashed border-(--line-strong) bg-[radial-gradient(circle_at_center,white_0%,white_46%,#eef3ff_47%,#eef3ff_60%,white_61%)] xl:h-48 xl:w-48 2xl:h-52 2xl:w-52">
-            <span className="text-center text-sm font-medium uppercase tracking-[0.18em] text-slate-400">
-              Donut
-              <br />
-              Placeholder
-            </span>
-            <div className="absolute inset-4 rounded-full border-14 border-slate-200" />
+          <div className="h-35 w-35 xl:h-48 xl:w-48 2xl:h-52 2xl:w-52">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={storageDonutData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius="60%"
+                  outerRadius="95%"
+                  paddingAngle={1}
+                  dataKey="value"
+                  stroke="none"
+                >
+                  {storageDonutData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  content={
+                    <ChartTooltip
+                      valueFormatter={(value) => `${value}%`}
+                    />
+                  }
+                />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
