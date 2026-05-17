@@ -44,3 +44,26 @@ export type WebActivityItem = {
   progress: number;
   duration: string;
 };
+
+export type OnlineUser = {
+  id: string;
+  name: string;
+  avatar: string;
+  location: string;
+  countryCode: string;
+  organization: string;
+  device: "windows" | "mac" | "linux";
+  currentActivity: string;
+  activityIcon: string;
+  timeUsage: string;
+  status: "active" | "idle" | "offline";
+};
+
+export type AppActivity = {
+  id: string;
+  appName: string;
+  appIcon: string;
+  totalUsers: number;
+  totalHours: string;
+  date: string;
+};

@@ -1,6 +1,8 @@
 import { ChevronDown, Globe } from "lucide-react";
 import { Section } from "../../../components/ui/section";
+import { AppIcon } from "../../../components/ui/app-icon";
 import type { WebActivityItem } from "../../../types/dashboard";
+import { cn } from "../../../utils/cn";
 
 type WebActivityCardProps = {
   items: WebActivityItem[];
@@ -14,7 +16,7 @@ export function WebActivityCard({ items }: WebActivityCardProps) {
       action={
         <button
           type="button"
-          className="hidden items-center gap-3 rounded-2xl border border-(--line) bg-white px-5 py-3 text-sm font-medium text-slate-500 md:inline-flex"
+          className="hidden items-center gap-3 rounded-2xl border border-(--line) bg-white px-5 py-3 text-sm font-medium text-slate-500 transition hover:border-(--line-strong) hover:text-slate-700 md:inline-flex"
         >
           Month
           <ChevronDown className="h-4 w-4" />
@@ -22,34 +24,47 @@ export function WebActivityCard({ items }: WebActivityCardProps) {
       }
       infoText="View your comprehensive organizational web report"
     >
-     
-
-      <div className="mt-3 space-y-4">
+      <div className="mt-4 space-y-3">
         {items.map((item) => (
           <div
             key={item.label}
-            className="space-y-3 border-b border-(--line) pb-4 last:border-b-0 last:pb-0"
+            className="group flex flex-col gap-3 rounded-xl border border-transparent p-2 transition-colors hover:border-(--line) hover:bg-(--panel-muted) sm:flex-row sm:items-center sm:gap-4 sm:p-3"
           >
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <div className="xl:min-w-30 2xl:min-w-0 text-lg font-medium text-slate-700">
-                {item.label}
-              </div>
-              <div className="flex-1">
-                <div className="h-2.5 rounded-full bg-slate-100">
-                  <div
-                    className="h-full rounded-full bg-lime-500"
-                    style={{ width: `${item.progress}%` }}
-                    aria-hidden="true"
-                  />
-                </div>
-              </div>
-              <div className="flex items-center justify-between gap-4 text-sm sm:min-w-45 sm:justify-end">
-                <span className="font-medium text-slate-500">
-                  {item.progress}%
-                </span>
-                <span className="text-slate-600">{item.duration}</span>
-              </div>
+            {/* App Icon & Name */}
+            <div className="flex items-center gap-3 sm:min-w-[120px]">
+              <AppIcon
+                app={item.label.toLowerCase() as never}
+                size="sm"
+                className="flex-shrink-0"
+              />
+              <span className="font-medium text-slate-700">{item.label}</span>
             </div>
+
+            {/* Progress Bar */}
+            <div className="flex flex-1 items-center gap-3">
+              <div className="h-2 flex-1 rounded-full bg-slate-100">
+                <div
+                  className={cn(
+                    "h-full rounded-full transition-all duration-500",
+                    item.progress >= 70
+                      ? "bg-emerald-500"
+                      : item.progress >= 50
+                        ? "bg-lime-500"
+                        : "bg-amber-500"
+                  )}
+                  style={{ width: `${item.progress}%` }}
+                  aria-hidden="true"
+                />
+              </div>
+              <span className="min-w-[40px] text-sm font-medium text-slate-500">
+                {item.progress}%
+              </span>
+            </div>
+
+            {/* Duration */}
+            <span className="text-sm text-slate-600 sm:min-w-[130px] sm:text-right">
+              {item.duration}
+            </span>
           </div>
         ))}
       </div>
