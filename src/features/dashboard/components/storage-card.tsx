@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HardDrive, Zap } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Card } from "../../../components/ui/card";
@@ -40,11 +41,12 @@ export function StorageCard({ legend }: StorageCardProps) {
                   ))}
                 </Pie>
                 <Tooltip
-                  content={
+                  content={(props) => (
                     <ChartTooltip
-                      valueFormatter={(value) => `${value}%`}
+                      {...props}
+                      formatValue={(value: any) => `${value}%`}
                     />
-                  }
+                  )}
                 />
               </PieChart>
             </ResponsiveContainer>

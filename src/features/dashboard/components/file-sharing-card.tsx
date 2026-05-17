@@ -119,7 +119,7 @@ export function FileSharingCard() {
                 tick={{ fill: "#64748b", fontSize: 11 }}
                 dx={-10}
               />
-              <Tooltip content={<ChartTooltip />} />
+              <Tooltip content={(props) => <ChartTooltip {...props} />} />
               <Area
                 type="monotone"
                 dataKey="public"

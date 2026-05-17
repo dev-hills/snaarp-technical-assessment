@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BarChart3, LineChart, Mail } from "lucide-react";
 import {
   Area,
@@ -42,13 +43,14 @@ export function EmailChartCard() {
                 ))}
               </Pie>
               <Tooltip
-                content={
+                content={(props) => (
                   <ChartTooltip
-                    valueFormatter={(value) =>
+                    {...props}
+                    formatValue={(value: any) =>
                       `${value} (${Math.round((value / totalEmails) * 100)}%)`
                     }
                   />
-                }
+                )}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -165,7 +167,7 @@ export function TotalEmailCard() {
                 tick={{ fill: "#64748b", fontSize: 11 }}
                 dx={-10}
               />
-              <Tooltip content={<ChartTooltip />} />
+              <Tooltip content={(props) => <ChartTooltip {...props} />} />
               <Area
                 type="monotone"
                 dataKey="sent"

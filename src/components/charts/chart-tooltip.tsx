@@ -1,18 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { TooltipProps } from "recharts";
+import type { TooltipContentProps } from "recharts/types/component/Tooltip";
+import type {
+  NameType,
+  ValueType,
+} from "recharts/types/component/DefaultTooltipContent";
 
-type ChartTooltipProps = TooltipProps<number, string> & {
-  labelFormatter?: (label: string) => string;
-  valueFormatter?: (value: number) => string;
+type CustomTooltipProps = {
+  formatLabel?: (label: string | number) => string;
+  formatValue?: (value: number | string) => string;
 };
 
-export function ChartTooltip({
+type ChartTooltipProps<
+  TValue extends ValueType,
+  TName extends NameType
+> = TooltipContentProps<TValue, TName> & CustomTooltipProps;
+
+export function ChartTooltip<TValue extends ValueType, TName extends NameType>({
   active,
   payload,
   label,
-  labelFormatter,
-  valueFormatter,
-}: ChartTooltipProps) {
+  formatLabel,
+  formatValue,
+}: ChartTooltipProps<TValue, TName>) {
   if (!active || !payload || !payload.length) {
     return null;
   }
@@ -24,7 +33,7 @@ export function ChartTooltip({
     >
       {label && (
         <p className="mb-2 font-medium text-slate-700">
-          {labelFormatter ? labelFormatter(label) : label}
+          {formatLabel ? formatLabel(label) : label}
         </p>
       )}
       <div className="space-y-1.5">
@@ -39,8 +48,8 @@ export function ChartTooltip({
             )}
             <span className="text-slate-500">{entry.name}:</span>
             <span className="font-semibold text-slate-700">
-              {valueFormatter && entry.value != null
-                ? valueFormatter(entry.value)
+              {formatValue && entry.value != null
+                ? formatValue(entry.value)
                 : entry.value}
             </span>
           </div>
