@@ -21,7 +21,6 @@ import { MetricCard } from "../features/dashboard/components/metric-card";
 import { StorageCard } from "../features/dashboard/components/storage-card";
 import { FileSharingCard } from "../features/dashboard/components/file-sharing-card";
 import { ActiveUsersCard } from "../features/dashboard/components/active-users-card";
-import { DashboardGroupHeader } from "../features/dashboard/components/dashboard-group-header";
 import { DeviceBreakdownCard } from "../features/dashboard/components/device-breakdown-card";
 import {
   EmailChartCard,
@@ -30,8 +29,10 @@ import {
 import { OnlineUsersCard } from "../features/dashboard/components/online-users-card";
 import { WebActivityCard } from "../features/dashboard/components/web-activity-card";
 import { AppActivityCard } from "../features/dashboard/components/app-activity-card";
+import { DashboardGroupSection } from "../features/dashboard/components/dashboard-group-section";
 import { SortableDashboardProvider } from "../features/dashboard/components/sortable/sortable-dashboard-context";
 import { SortableWidget } from "../features/dashboard/components/sortable/sortable-widget";
+import { useDashboardGroupState } from "../features/dashboard/hooks/use-dashboard-group-state";
 
 const CLOUD_SECTION_ORDER = ["cloud-metrics", "cloud-storage"] as const;
 const NETWORK_SECTION_ORDER = ["file-sharing", "active-users"] as const;
@@ -49,18 +50,35 @@ const PRODUCTIVITY_SECTION_ORDER = [
 ] as const;
 const EMAIL_SECTION_ORDER = ["email-chart", "email-total"] as const;
 const REPORT_SECTION_ORDER = ["app-activity", "web-activity"] as const;
+const DASHBOARD_GROUP_ORDER = ["cloud", "device", "productivity"] as const;
 
 type WidgetDefinition = {
   className?: string;
   render: () => React.ReactNode;
 };
 
+type GroupDefinition = {
+  id: (typeof DASHBOARD_GROUP_ORDER)[number];
+  title: string;
+  icon: typeof Globe;
+  actionLabel?: string;
+  widgetIds: readonly string[];
+  render: () => React.ReactNode;
+};
+
 export function DashboardPage() {
-  const cloudSectionWidgets: Record<(typeof CLOUD_SECTION_ORDER)[number], WidgetDefinition> = {
+  const { collapsedById, toggleGroupCollapsed } = useDashboardGroupState({
+    groupIds: [...DASHBOARD_GROUP_ORDER],
+  });
+
+  const cloudSectionWidgets: Record<
+    (typeof CLOUD_SECTION_ORDER)[number],
+    WidgetDefinition
+  > = {
     "cloud-metrics": {
       className: "2xl:col-span-5",
       render: () => (
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid gap-2 sm:grid-cols-2 h-full">
           {cloudMetrics.map((metric) => (
             <MetricCard key={metric.title} metric={metric} />
           ))}
@@ -68,7 +86,7 @@ export function DashboardPage() {
       ),
     },
     "cloud-storage": {
-      className: "2xl:col-span-7",
+      className: "2xl:col-span-7 h-full",
       render: () => <StorageCard legend={storageLegend} />,
     },
   };
@@ -78,11 +96,11 @@ export function DashboardPage() {
     WidgetDefinition
   > = {
     "file-sharing": {
-      className: "2xl:col-span-5",
+      className: "2xl:col-span-5 my-5",
       render: () => <FileSharingCard />,
     },
     "active-users": {
-      className: "2xl:col-span-7",
+      className: "2xl:col-span-7 my-5",
       render: () => <ActiveUsersCard regions={activeUserRegions} />,
     },
   };
@@ -135,7 +153,7 @@ export function DashboardPage() {
     },
     "device-apps-downloads": {
       render: () => (
-        <div className="grid gap-2">
+        <div className="grid h-full grid-rows-2 gap-2">
           <MetricCard metric={deviceMetrics[3]} />
           <MetricCard metric={deviceMetrics[4]} />
         </div>
@@ -161,7 +179,10 @@ export function DashboardPage() {
     },
   };
 
-  const emailSectionWidgets: Record<(typeof EMAIL_SECTION_ORDER)[number], WidgetDefinition> = {
+  const emailSectionWidgets: Record<
+    (typeof EMAIL_SECTION_ORDER)[number],
+    WidgetDefinition
+  > = {
     "email-chart": {
       className: "xl:col-span-4 2xl:col-span-3",
       render: () => <EmailChartCard />,
@@ -172,7 +193,10 @@ export function DashboardPage() {
     },
   };
 
-  const reportSectionWidgets: Record<(typeof REPORT_SECTION_ORDER)[number], WidgetDefinition> = {
+  const reportSectionWidgets: Record<
+    (typeof REPORT_SECTION_ORDER)[number],
+    WidgetDefinition
+  > = {
     "app-activity": {
       className: "xl:col-span-8",
       render: () => <AppActivityCard activities={appActivities} />,
@@ -186,7 +210,7 @@ export function DashboardPage() {
   const renderSortableWidget = (
     id: string,
     definition: WidgetDefinition,
-    dragOverlay = false,
+    dragOverlay = false
   ) => (
     <SortableWidget
       key={id}
@@ -198,162 +222,249 @@ export function DashboardPage() {
     </SortableWidget>
   );
 
-  const renderCloudSection = (id: (typeof CLOUD_SECTION_ORDER)[number], dragOverlay = false) => {
+  const renderCloudSection = (
+    id: (typeof CLOUD_SECTION_ORDER)[number],
+    dragOverlay = false
+  ) => {
     return renderSortableWidget(id, cloudSectionWidgets[id], dragOverlay);
   };
 
   const renderNetworkSection = (
     id: (typeof NETWORK_SECTION_ORDER)[number],
-    dragOverlay = false,
+    dragOverlay = false
   ) => {
     return renderSortableWidget(id, networkSectionWidgets[id], dragOverlay);
   };
 
   const renderDeviceSection = (
     id: (typeof DEVICE_SECTION_ORDER)[number],
-    dragOverlay = false,
+    dragOverlay = false
   ) => {
     return renderSortableWidget(id, deviceSectionWidgets[id], dragOverlay);
   };
 
   const renderProductivitySection = (
     id: (typeof PRODUCTIVITY_SECTION_ORDER)[number],
-    dragOverlay = false,
+    dragOverlay = false
   ) => {
-    return renderSortableWidget(id, productivitySectionWidgets[id], dragOverlay);
+    return renderSortableWidget(
+      id,
+      productivitySectionWidgets[id],
+      dragOverlay
+    );
   };
 
   const renderEmailSection = (
     id: (typeof EMAIL_SECTION_ORDER)[number],
-    dragOverlay = false,
+    dragOverlay = false
   ) => {
     return renderSortableWidget(id, emailSectionWidgets[id], dragOverlay);
   };
 
   const renderReportSection = (
     id: (typeof REPORT_SECTION_ORDER)[number],
-    dragOverlay = false,
+    dragOverlay = false
   ) => {
     return renderSortableWidget(id, reportSectionWidgets[id], dragOverlay);
+  };
+
+  const groupDefinitions: Record<GroupDefinition["id"], GroupDefinition> = {
+    cloud: {
+      id: "cloud",
+      title: "Cloud Network",
+      icon: Globe,
+      actionLabel: "",
+      widgetIds: [...CLOUD_SECTION_ORDER, ...NETWORK_SECTION_ORDER],
+      render: () => (
+        <>
+          <SortableDashboardProvider
+            defaultItems={[...CLOUD_SECTION_ORDER]}
+            storageKey="dashboard-widget-order:cloud"
+            renderOverlay={(activeId) =>
+              renderCloudSection(
+                activeId as (typeof CLOUD_SECTION_ORDER)[number],
+                true
+              )
+            }
+          >
+            {(items) => (
+              <section className="grid gap-4 xl:items-start 2xl:grid-cols-12 2xl:items-stretch">
+                {items.map((item) =>
+                  renderCloudSection(
+                    item as (typeof CLOUD_SECTION_ORDER)[number]
+                  )
+                )}
+              </section>
+            )}
+          </SortableDashboardProvider>
+
+          <SortableDashboardProvider
+            defaultItems={[...NETWORK_SECTION_ORDER]}
+            storageKey="dashboard-widget-order:network"
+            renderOverlay={(activeId) =>
+              renderNetworkSection(
+                activeId as (typeof NETWORK_SECTION_ORDER)[number],
+                true
+              )
+            }
+          >
+            {(items) => (
+              <section className="grid gap-4 xl:items-start 2xl:grid-cols-12 2xl:items-stretch">
+                {items.map((item) =>
+                  renderNetworkSection(
+                    item as (typeof NETWORK_SECTION_ORDER)[number]
+                  )
+                )}
+              </section>
+            )}
+          </SortableDashboardProvider>
+        </>
+      ),
+    },
+    device: {
+      id: "device",
+      title: "Device Management Dashboard",
+      icon: MonitorCog,
+      widgetIds: [...DEVICE_SECTION_ORDER],
+      render: () => (
+        <SortableDashboardProvider
+          defaultItems={[...DEVICE_SECTION_ORDER]}
+          storageKey="dashboard-widget-order:device"
+          renderOverlay={(activeId) =>
+            renderDeviceSection(
+              activeId as (typeof DEVICE_SECTION_ORDER)[number],
+              true
+            )
+          }
+        >
+          {(items) => (
+            <section className="grid auto-rows-fr gap-4 xl:grid-cols-2 2xl:grid-cols-4">
+              {items.map((item) =>
+                renderDeviceSection(
+                  item as (typeof DEVICE_SECTION_ORDER)[number]
+                )
+              )}
+            </section>
+          )}
+        </SortableDashboardProvider>
+      ),
+    },
+    productivity: {
+      id: "productivity",
+      title: "Productivity Report",
+      icon: Smartphone,
+      widgetIds: [
+        ...PRODUCTIVITY_SECTION_ORDER,
+        ...EMAIL_SECTION_ORDER,
+        "online-users",
+        ...REPORT_SECTION_ORDER,
+      ],
+      render: () => (
+        <>
+          <SortableDashboardProvider
+            defaultItems={[...PRODUCTIVITY_SECTION_ORDER]}
+            storageKey="dashboard-widget-order:productivity"
+            renderOverlay={(activeId) =>
+              renderProductivitySection(
+                activeId as (typeof PRODUCTIVITY_SECTION_ORDER)[number],
+                true
+              )
+            }
+          >
+            {(items) => (
+              <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4">
+                {items.map((item) =>
+                  renderProductivitySection(
+                    item as (typeof PRODUCTIVITY_SECTION_ORDER)[number]
+                  )
+                )}
+              </section>
+            )}
+          </SortableDashboardProvider>
+
+          <SortableDashboardProvider
+            defaultItems={[...EMAIL_SECTION_ORDER]}
+            storageKey="dashboard-widget-order:email"
+            renderOverlay={(activeId) =>
+              renderEmailSection(
+                activeId as (typeof EMAIL_SECTION_ORDER)[number],
+                true
+              )
+            }
+          >
+            {(items) => (
+              <section className="grid gap-4 xl:grid-cols-12 xl:items-start 2xl:items-stretch my-5">
+                {items.map((item) =>
+                  renderEmailSection(
+                    item as (typeof EMAIL_SECTION_ORDER)[number]
+                  )
+                )}
+              </section>
+            )}
+          </SortableDashboardProvider>
+
+          <OnlineUsersCard users={onlineUsers} />
+
+          <SortableDashboardProvider
+            defaultItems={[...REPORT_SECTION_ORDER]}
+            storageKey="dashboard-widget-order:reports"
+            renderOverlay={(activeId) =>
+              renderReportSection(
+                activeId as (typeof REPORT_SECTION_ORDER)[number],
+                true
+              )
+            }
+          >
+            {(items) => (
+              <section className="grid gap-4 xl:grid-cols-12 xl:items-start 2xl:items-stretch mt-5">
+                {items.map((item) =>
+                  renderReportSection(
+                    item as (typeof REPORT_SECTION_ORDER)[number]
+                  )
+                )}
+              </section>
+            )}
+          </SortableDashboardProvider>
+        </>
+      ),
+    },
+  };
+
+  const renderGroup = (groupId: GroupDefinition["id"], dragOverlay = false) => {
+    const group = groupDefinitions[groupId];
+
+    return (
+      <SortableWidget
+        key={group.id}
+        id={group.id}
+        dragOverlay={dragOverlay}
+        className="space-y-4 xl:space-y-5"
+      >
+        <DashboardGroupSection
+          id={group.id}
+          title={group.title}
+          icon={group.icon}
+          actionLabel={group.actionLabel}
+          collapsed={Boolean(collapsedById[group.id])}
+          onToggle={toggleGroupCollapsed}
+        >
+          {group.render()}
+        </DashboardGroupSection>
+      </SortableWidget>
+    );
   };
 
   return (
     <DashboardLayout>
       <PageContainer className="space-y-4 xl:space-y-5">
-        <DashboardGroupHeader
-          title="Cloud Network"
-          icon={Globe}
-          actionLabel=""
-        />
-
         <SortableDashboardProvider
-          defaultItems={[...CLOUD_SECTION_ORDER]}
-          storageKey="dashboard-widget-order:cloud"
-          renderOverlay={(activeId) =>
-            renderCloudSection(activeId as (typeof CLOUD_SECTION_ORDER)[number], true)
-          }
+          defaultItems={[...DASHBOARD_GROUP_ORDER]}
+          storageKey="dashboard-group-order"
         >
           {(items) => (
-            <section className="grid gap-4 xl:items-start 2xl:grid-cols-12 2xl:items-stretch">
-              {items.map((item) => renderCloudSection(item as (typeof CLOUD_SECTION_ORDER)[number]))}
-            </section>
-          )}
-        </SortableDashboardProvider>
-
-        <SortableDashboardProvider
-          defaultItems={[...NETWORK_SECTION_ORDER]}
-          storageKey="dashboard-widget-order:network"
-          renderOverlay={(activeId) =>
-            renderNetworkSection(
-              activeId as (typeof NETWORK_SECTION_ORDER)[number],
-              true,
-            )
-          }
-        >
-          {(items) => (
-            <section className="grid gap-4 xl:items-start 2xl:grid-cols-12 2xl:items-stretch">
-              {items.map((item) =>
-                renderNetworkSection(item as (typeof NETWORK_SECTION_ORDER)[number]),
-              )}
-            </section>
-          )}
-        </SortableDashboardProvider>
-
-        <DashboardGroupHeader
-          title="Device Management Dashboard"
-          icon={MonitorCog}
-        />
-
-        <SortableDashboardProvider
-          defaultItems={[...DEVICE_SECTION_ORDER]}
-          storageKey="dashboard-widget-order:device"
-          renderOverlay={(activeId) =>
-            renderDeviceSection(activeId as (typeof DEVICE_SECTION_ORDER)[number], true)
-          }
-        >
-          {(items) => (
-            <section className="grid gap-4 xl:grid-cols-2  2xl:grid-cols-4 xl:items-stretch">
-              {items.map((item) =>
-                renderDeviceSection(item as (typeof DEVICE_SECTION_ORDER)[number]),
-              )}
-            </section>
-          )}
-        </SortableDashboardProvider>
-
-        <DashboardGroupHeader title="Productivity Report" icon={Smartphone} />
-
-        <SortableDashboardProvider
-          defaultItems={[...PRODUCTIVITY_SECTION_ORDER]}
-          storageKey="dashboard-widget-order:productivity"
-          renderOverlay={(activeId) =>
-            renderProductivitySection(
-              activeId as (typeof PRODUCTIVITY_SECTION_ORDER)[number],
-              true,
-            )
-          }
-        >
-          {(items) => (
-            <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4">
-              {items.map((item) =>
-                renderProductivitySection(
-                  item as (typeof PRODUCTIVITY_SECTION_ORDER)[number],
-                ),
-              )}
-            </section>
-          )}
-        </SortableDashboardProvider>
-
-        <SortableDashboardProvider
-          defaultItems={[...EMAIL_SECTION_ORDER]}
-          storageKey="dashboard-widget-order:email"
-          renderOverlay={(activeId) =>
-            renderEmailSection(activeId as (typeof EMAIL_SECTION_ORDER)[number], true)
-          }
-        >
-          {(items) => (
-            <section className="grid gap-4 xl:grid-cols-12 xl:items-start 2xl:items-stretch">
-              {items.map((item) =>
-                renderEmailSection(item as (typeof EMAIL_SECTION_ORDER)[number]),
-              )}
-            </section>
-          )}
-        </SortableDashboardProvider>
-
-        <OnlineUsersCard users={onlineUsers} />
-
-        <SortableDashboardProvider
-          defaultItems={[...REPORT_SECTION_ORDER]}
-          storageKey="dashboard-widget-order:reports"
-          renderOverlay={(activeId) =>
-            renderReportSection(activeId as (typeof REPORT_SECTION_ORDER)[number], true)
-          }
-        >
-          {(items) => (
-            <section className="grid gap-4 xl:grid-cols-12 xl:items-start 2xl:items-stretch">
-              {items.map((item) =>
-                renderReportSection(item as (typeof REPORT_SECTION_ORDER)[number]),
-              )}
-            </section>
+            <div className="space-y-4 xl:space-y-5">
+              {items.map((item) => renderGroup(item as GroupDefinition["id"]))}
+            </div>
           )}
         </SortableDashboardProvider>
       </PageContainer>

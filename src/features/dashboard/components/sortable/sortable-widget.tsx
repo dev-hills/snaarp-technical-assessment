@@ -47,10 +47,10 @@ export function SortableWidget({
         className={cn(
           "touch-none",
           isDragging ? "z-10 opacity-90" : "",
-          className,
+          className
         )}
       >
-        {children}
+        <div className="h-full">{children}</div>
       </div>
     </SortableItemContext.Provider>
   );

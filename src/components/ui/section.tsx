@@ -28,7 +28,7 @@ export function Section({
   infoText,
 }: SectionProps) {
   return (
-    <Card className={cn("overflow-hidden relative", className)}>
+    <Card className={cn("h-full overflow-hidden relative", className)}>
       <DragHandle className="absolute inset-0 z-10 opacity-0 focus-visible:opacity-100" />
       <div className="flex items-center justify-between gap-3 px-4 py-4 sm:px-5 xl:px-6">
         <div className="flex flex-col">
