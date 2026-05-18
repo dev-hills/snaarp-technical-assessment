@@ -19,7 +19,7 @@ function UpgradeButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       type="button"
-      className="inline-flex items-center gap-2 rounded-xl bg-(--brand) px-4 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(79,106,246,0.22)] transition hover:brightness-105"
+      className="inline-flex items-center gap-2 rounded-xl bg-(--brand) px-4 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(79,106,246,0.22)] transition hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--brand)"
       {...props}
     >
       <Zap className="h-4 w-4" />
@@ -64,7 +64,7 @@ export function DashboardGroupHeader({
         {actionLabel ? <UpgradeButton aria-label={actionLabel} /> : null}
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-2xl text-[#3d3d3d]"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-2xl text-[#3d3d3d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--brand)"
           aria-label={collapseLabel}
           aria-expanded={!collapsed}
           aria-controls={controlsId}

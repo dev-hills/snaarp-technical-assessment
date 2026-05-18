@@ -1,73 +1,114 @@
-# React + TypeScript + Vite
+# Snaarp Analytics Dashboard Assessment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Production-style analytics dashboard built for the Snaarp technical assessment using React, Vite, TypeScript, Tailwind CSS, Recharts, and dnd-kit.
 
-Currently, two official plugins are available:
+## Assessment Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This project recreates a dense admin dashboard experience from a provided design reference and focuses on production-oriented frontend concerns:
 
-## React Compiler
+- scalable component architecture
+- responsive dashboard layout
+- reusable cards and section primitives
+- accessible interactions
+- persistent drag-and-drop layout customization
+- submission-ready code quality and documentation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React 19
+- Vite 8
+- TypeScript
+- Tailwind CSS 4
+- Lucide React
+- Recharts
+- dnd-kit
+- ESLint
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- responsive dashboard shell with fixed desktop sidebar and mobile drawer
+- reusable sidebar, navbar, cards, sections, and page container components
+- hardcoded assessment data for all dashboard views
+- widget-level drag-and-drop reordering within dashboard sections
+- group-level drag-and-drop for major dashboard sections
+- collapsible dashboard groups
+- persistent layout state using `localStorage`
+- subtle reset layout action for clearing saved order/collapse state
+- keyboard-accessible drag handles for sortable items
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Drag-and-Drop Behavior
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The dashboard uses dnd-kit in two layers:
+
+- group-level sorting for `Cloud Network`, `Device Management Dashboard`, and `Productivity Report`
+- widget-level sorting inside each expanded dashboard group
+
+Saved state is persisted independently for:
+
+- dashboard group order
+- collapsed/expanded group state
+- widget order inside each sortable widget collection
+
+The reset layout action clears persisted dashboard layout keys and restores the default assessment arrangement.
+
+## Accessibility Notes
+
+- interactive controls include accessible labels
+- sortable drag handles are keyboard focusable
+- focus-visible styles are applied to key controls such as drag handles, menu buttons, collapse controls, and reset layout
+- search input includes an accessible label
+
+## How to Run Locally
+
+1. Install dependencies:
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Start the development server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+3. Open the local URL shown by Vite in your terminal.
+
+## Build Command
+
+```bash
+npm run build
+```
+
+## Final QA Status
+
+- TypeScript build passes
+- ESLint passes
+- persisted layout state works across refreshes
+- group collapse state persists across refreshes
+- sidebar remains scrollable on shorter desktop screens
+
+## Deployment Note
+
+The project is ready for standard Vite deployment targets such as Vercel or Netlify. No extra deployment configuration is required for a basic static deployment.
+
+Build output is generated in:
+
+```bash
+dist/
+```
+
+## Challenges Faced
+
+- preserving widget sizing while sorting across mixed-width dashboard sections
+- layering group-level drag-and-drop on top of widget-level drag-and-drop without event conflicts
+- keeping drag interactions keyboard accessible while maintaining the existing visual design
+- ensuring desktop sidebar scrolling worked correctly on shorter laptop-height viewports
+
+## Live Demo
+
+- Live demo: `https://snaarp-technical-assessment.vercel.app`
+
+## Repository
+
+- GitHub repo: `https://github.com/dev-hills/snaarp-technical-assessment`

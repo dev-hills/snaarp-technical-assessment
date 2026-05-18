@@ -5,9 +5,13 @@ import { useLockBodyScroll } from "../hooks/use-lock-body-scroll";
 
 type DashboardLayoutProps = {
   children: ReactNode;
+  onResetLayout?: () => void;
 };
 
-export function DashboardLayout({ children }: DashboardLayoutProps) {
+export function DashboardLayout({
+  children,
+  onResetLayout,
+}: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useLockBodyScroll(sidebarOpen);
@@ -27,7 +31,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="flex min-h-screen bg-[#f6f6f6]  p-3">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 min-w-0 w-full">
-        <TopNavbar onMenuClick={() => setSidebarOpen(true)} />
+        <TopNavbar
+          onMenuClick={() => setSidebarOpen(true)}
+          onResetLayout={onResetLayout}
+        />
         <main className="px-2 pb-6 md:px-3 xl:px-2 2xl:px-2">{children}</main>
       </div>
     </div>

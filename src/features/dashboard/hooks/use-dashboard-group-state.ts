@@ -15,10 +15,19 @@ type UseDashboardGroupStateParams = {
 export function useDashboardGroupState({
   groupIds,
 }: UseDashboardGroupStateParams) {
+  const getDefaultCollapsedState = useCallback(
+    () =>
+      groupIds.reduce<Record<string, boolean>>((accumulator, id) => {
+        accumulator[id] = false;
+        return accumulator;
+      }, {}),
+    [groupIds],
+  );
+
   const [collapsedById, setCollapsedById] = useState<Record<string, boolean>>(
     () => {
       if (typeof window === "undefined") {
-        return {};
+        return getDefaultCollapsedState();
       }
 
       try {
@@ -36,7 +45,7 @@ export function useDashboardGroupState({
           return accumulator;
         }, {});
       } catch {
-        return {};
+        return getDefaultCollapsedState();
       }
     },
   );
@@ -65,8 +74,13 @@ export function useDashboardGroupState({
     }));
   }, []);
 
+  const resetCollapsedState = useCallback(() => {
+    setCollapsedById(getDefaultCollapsedState());
+  }, [getDefaultCollapsedState]);
+
   return {
     collapsedById,
     toggleGroupCollapsed,
+    resetCollapsedState,
   };
 }

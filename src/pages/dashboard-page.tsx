@@ -1,4 +1,5 @@
 import { Globe, MonitorCog, Smartphone } from "lucide-react";
+import { useCallback, useState } from "react";
 import { PageContainer } from "../components/ui/page-container";
 import { DashboardLayout } from "../layouts/dashboard-layout";
 import {
@@ -51,6 +52,16 @@ const PRODUCTIVITY_SECTION_ORDER = [
 const EMAIL_SECTION_ORDER = ["email-chart", "email-total"] as const;
 const REPORT_SECTION_ORDER = ["app-activity", "web-activity"] as const;
 const DASHBOARD_GROUP_ORDER = ["cloud", "device", "productivity"] as const;
+const DASHBOARD_STORAGE_KEYS = [
+  "dashboard-group-state",
+  "dashboard-group-order",
+  "dashboard-widget-order:cloud",
+  "dashboard-widget-order:network",
+  "dashboard-widget-order:device",
+  "dashboard-widget-order:productivity",
+  "dashboard-widget-order:email",
+  "dashboard-widget-order:reports",
+] as const;
 
 type WidgetDefinition = {
   className?: string;
@@ -67,9 +78,22 @@ type GroupDefinition = {
 };
 
 export function DashboardPage() {
-  const { collapsedById, toggleGroupCollapsed } = useDashboardGroupState({
+  const [layoutResetVersion, setLayoutResetVersion] = useState(0);
+  const { collapsedById, toggleGroupCollapsed, resetCollapsedState } =
+    useDashboardGroupState({
     groupIds: [...DASHBOARD_GROUP_ORDER],
   });
+
+  const handleResetLayout = useCallback(() => {
+    if (typeof window !== "undefined") {
+      DASHBOARD_STORAGE_KEYS.forEach((storageKey) => {
+        window.localStorage.removeItem(storageKey);
+      });
+    }
+
+    resetCollapsedState();
+    setLayoutResetVersion((current) => current + 1);
+  }, [resetCollapsedState]);
 
   const cloudSectionWidgets: Record<
     (typeof CLOUD_SECTION_ORDER)[number],
@@ -455,9 +479,10 @@ export function DashboardPage() {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout onResetLayout={handleResetLayout}>
       <PageContainer className="space-y-4 xl:space-y-5">
         <SortableDashboardProvider
+          key={`dashboard-groups-${layoutResetVersion}`}
           defaultItems={[...DASHBOARD_GROUP_ORDER]}
           storageKey="dashboard-group-order"
         >

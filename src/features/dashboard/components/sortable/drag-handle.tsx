@@ -36,7 +36,7 @@ export function DragHandle({
       {...attributes}
       {...listeners}
       className={cn(
-        "cursor-grab rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 active:cursor-grabbing",
+        "cursor-grab rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--brand) active:cursor-grabbing",
         isDragging ? "cursor-grabbing" : "",
         className,
       )}

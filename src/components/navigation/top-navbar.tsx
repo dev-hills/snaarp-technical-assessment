@@ -3,9 +3,13 @@ import { PageContainer } from "../ui/page-container";
 
 type TopNavbarProps = {
   onMenuClick: () => void;
+  onResetLayout?: () => void;
 };
 
-export function TopNavbar({ onMenuClick }: TopNavbarProps) {
+export function TopNavbar({
+  onMenuClick,
+}: //  onResetLayout
+TopNavbarProps) {
   return (
     <header className="sticky top-0 z-20  px-3 pb-3 backdrop-blur md:px-4 lg:px-2">
       <PageContainer>
@@ -14,12 +18,12 @@ export function TopNavbar({ onMenuClick }: TopNavbarProps) {
             <button
               type="button"
               onClick={onMenuClick}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-(--line) bg-white text-slate-600 transition hover:text-slate-900 lg:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-(--line) bg-white text-slate-600 transition hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--brand) lg:hidden"
               aria-label="Open menu"
             >
               <Menu className="h-5 w-5" />
             </button>
-            <label className="group flex min-h-10 flex-1 items-center gap-3 rounded-xl border border-[#d1d1d1] px-4 lg:min-w-105 xl:min-w-130 2xl:min-w-155">
+            <label className="group flex min-h-10 flex-1 items-center gap-3 rounded-xl border border-[#d1d1d1] px-4 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-(--brand) lg:min-w-105 xl:min-w-130 2xl:min-w-155">
               <Search className="h-5 w-5 text-slate-400 transition" />
               <input
                 type="search"
@@ -31,9 +35,20 @@ export function TopNavbar({ onMenuClick }: TopNavbarProps) {
           </div>
 
           <div className="flex items-center justify-end gap-3">
+            {/* {onResetLayout ? (
+              <button
+                type="button"
+                onClick={onResetLayout}
+                className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#F6F6F6] px-3 text-sm font-medium text-slate-600 transition hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--brand)"
+                aria-label="Reset saved dashboard layout"
+              >
+                <RotateCcw className="h-4 w-4" />
+                <span className="hidden xl:inline">Reset layout</span>
+              </button>
+            ) : null} */}
             <button
               type="button"
-              className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#F6F6F6] text-black transition hover:text-slate-900"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#F6F6F6] text-black transition hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--brand)"
               aria-label="Notifications"
             >
               <Bell className="h-5 w-5" />
