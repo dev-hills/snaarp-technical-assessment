@@ -8,6 +8,8 @@ import type { MetricCardData } from "../../../types/dashboard";
 import { Card } from "../../../components/ui/card";
 import { IconWrapper } from "../../../components/ui/icon-wrapper";
 import { cn } from "../../../utils/cn";
+import { useMemo } from "react";
+import { DragHandle } from "./sortable/drag-handle";
 
 // Generate smooth trend data based on trend direction
 function generateSparklineData(trend: "up" | "down"): { value: number }[] {
@@ -27,13 +29,15 @@ type MetricCardProps = {
 
 export function MetricCard({ metric }: MetricCardProps) {
   const positive = metric.trend === "up";
+  const sparklineData = useMemo(() => generateSparklineData(metric.trend), [metric.trend]);
 
   const gradientId = `gradient-${metric.title.replace(/\s+/g, "-").toLowerCase()}`;
 
   return (
-    <Card className="overflow-hidden p-4 sm:p-5 xl:p-3">
+    <Card className="relative overflow-hidden p-4 sm:p-5 xl:p-3">
+      <DragHandle className="absolute inset-0 z-10 opacity-0 focus-visible:opacity-100" />
       <div>
-        <div className="flex items-center gap-2">
+        <div className="relative flex items-center gap-2">
           <IconWrapper
             icon={metric.icon}
             className="w-9! h-9! p-1! rounded-lg!"
@@ -82,7 +86,7 @@ export function MetricCard({ metric }: MetricCardProps) {
 
           <div className="h-20 w-[45%]">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={generateSparklineData(metric.trend)}>
+              <AreaChart data={sparklineData}>
                 <defs>
                   <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
                     <stop

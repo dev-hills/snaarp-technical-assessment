@@ -4,6 +4,7 @@ import { Card } from "./card";
 import { IconWrapper } from "./icon-wrapper";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "../../utils/cn";
+import { DragHandle } from "../../features/dashboard/components/sortable/drag-handle";
 
 type SectionProps = {
   title: string;
@@ -27,7 +28,8 @@ export function Section({
   infoText,
 }: SectionProps) {
   return (
-    <Card className={cn("overflow-hidden", className)}>
+    <Card className={cn("overflow-hidden relative", className)}>
+      <DragHandle className="absolute inset-0 z-10 opacity-0 focus-visible:opacity-100" />
       <div className="flex items-center justify-between gap-3 px-4 py-4 sm:px-5 xl:px-6">
         <div className="flex flex-col">
           <div className="flex items-center gap-3">

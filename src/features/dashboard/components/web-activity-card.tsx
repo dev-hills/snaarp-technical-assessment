@@ -31,11 +31,11 @@ export function WebActivityCard({ items }: WebActivityCardProps) {
             className="group flex flex-col gap-3 rounded-xl border border-transparent p-2 transition-colors hover:border-(--line) hover:bg-(--panel-muted) sm:flex-row sm:items-center sm:gap-4 sm:p-3"
           >
             {/* App Icon & Name */}
-            <div className="flex items-center gap-3 sm:min-w-[120px]">
+            <div className="flex items-center gap-3 sm:min-w-30">
               <AppIcon
                 app={item.label.toLowerCase() as never}
                 size="sm"
-                className="flex-shrink-0"
+                className="shrink-0"
               />
               <span className="font-medium text-slate-700">{item.label}</span>
             </div>
@@ -56,13 +56,13 @@ export function WebActivityCard({ items }: WebActivityCardProps) {
                   aria-hidden="true"
                 />
               </div>
-              <span className="min-w-[40px] text-sm font-medium text-slate-500">
+              <span className="min-w-10 text-sm font-medium text-slate-500">
                 {item.progress}%
               </span>
             </div>
 
             {/* Duration */}
-            <span className="text-sm text-slate-600 sm:min-w-[130px] sm:text-right">
+            <span className="text-sm text-slate-600 sm:min-w-32.5 sm:text-right">
               {item.duration}
             </span>
           </div>

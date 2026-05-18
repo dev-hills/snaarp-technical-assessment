@@ -1,9 +1,6 @@
 import { ArrowDown, ArrowUp, type LucideIcon } from "lucide-react";
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-} from "recharts";
+import { useMemo } from "react";
+import { ResponsiveContainer, AreaChart, Area } from "recharts";
 import { Card } from "../../../components/ui/card";
 import { IconWrapper } from "../../../components/ui/icon-wrapper";
 import type {
@@ -11,6 +8,7 @@ import type {
   SummarySplitItem,
 } from "../../../types/dashboard";
 import { cn } from "../../../utils/cn";
+import { DragHandle } from "./sortable/drag-handle";
 
 // Generate smooth trend data based on trend direction
 function generateSparklineData(trend: "up" | "down"): { value: number }[] {
@@ -19,7 +17,9 @@ function generateSparklineData(trend: "up" | "down"): { value: number }[] {
   for (let i = 0; i < 12; i++) {
     const variation = Math.sin(i * 0.8) * 15 + Math.random() * 10;
     const trendOffset = trend === "up" ? i * 2 : -i * 2;
-    data.push({ value: Math.max(10, Math.min(90, base + variation + trendOffset)) });
+    data.push({
+      value: Math.max(10, Math.min(90, base + variation + trendOffset)),
+    });
   }
   return data;
 }
@@ -102,10 +102,15 @@ export function DeviceBreakdownCard({
   detailItems,
 }: DeviceBreakdownCardProps) {
   const positive = trend === "up";
+  const sparklineData = useMemo(
+    () => generateSparklineData(trend as "up" | "down"),
+    [trend]
+  );
   const gradientId = `gradient-${title.replace(/\s+/g, "-").toLowerCase()}`;
   return (
     <div>
-      <Card className="space-y-4 p-5 sm:p-6 mb-2">
+      <Card className="relative space-y-4 p-5 sm:p-6 mb-2">
+        <DragHandle className="absolute inset-0 z-10 opacity-0 focus-visible:opacity-100" />
         <div className="flex items-center gap-2">
           <IconWrapper icon={icon} className="h-10 w-10 rounded-xl" />
           <h3 className="text-lg font-medium tracking-[-0.03em] text-[#3d3d3d]">
@@ -138,7 +143,7 @@ export function DeviceBreakdownCard({
           </div>
           <div className="w-[45%] h-20">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={generateSparklineData(trend as "up" | "down")}>
+              <AreaChart data={sparklineData}>
                 <defs>
                   <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
                     <stop

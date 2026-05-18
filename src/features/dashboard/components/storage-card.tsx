@@ -6,6 +6,7 @@ import { IconWrapper } from "../../../components/ui/icon-wrapper";
 import { ChartTooltip } from "../../../components/charts/chart-tooltip";
 import type { StorageLegendItem } from "../../../types/dashboard";
 import { storageDonutData } from "../../../data/dashboard-charts";
+import { DragHandle } from "./sortable/drag-handle";
 
 type StorageCardProps = {
   legend: StorageLegendItem[];
@@ -13,7 +14,8 @@ type StorageCardProps = {
 
 export function StorageCard({ legend }: StorageCardProps) {
   return (
-    <Card className="p-4 sm:p-5 xl:p-3">
+    <Card className="relative p-4 sm:p-5 xl:p-3">
+      <DragHandle className="absolute inset-0 z-10 opacity-0 focus-visible:opacity-100" />
       <div className="flex items-center gap-3">
         <IconWrapper icon={HardDrive} className="h-9! w-9! rounded-2xl" />
         <h3 className="text-lg font-medium tracking-[-0.03em] text-[#3d3d3d]">
