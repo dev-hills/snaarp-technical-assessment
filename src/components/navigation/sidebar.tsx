@@ -22,7 +22,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       />
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex w-73 flex-col border-r border-(--line) bg-white px-5 py-6 shadow-xl transition-transform duration-300 lg:sticky lg:top-0 lg:z-10 lg:h-screen lg:translate-x-0 lg:rounded-4xl lg:shadow-none",
+          "fixed inset-y-0 left-0 z-40 flex h-screen max-h-screen w-73 flex-col overflow-hidden border-r border-(--line) bg-white px-5 pt-6 shadow-xl transition-transform duration-300 lg:sticky lg:top-0 lg:z-10 lg:h-screen lg:max-h-screen lg:translate-x-0 lg:rounded-4xl lg:shadow-none",
           open ? "translate-x-0" : "-translate-x-full"
         )}
         aria-label="Sidebar"
@@ -41,53 +41,57 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           </button>
         </div>
 
-        <nav className="mt-10 space-y-1.5" aria-label="Primary">
-          {primaryNavigation.map(({ label, icon: Icon, active }) => (
-            <a
-              key={label}
-              href="#"
-              aria-current={active ? "page" : undefined}
-              className={cn(
-                "flex items-center gap-3 rounded-2xl px-4 py-3 text-[0.96rem] font-medium transition",
-                active
-                  ? "bg-(--brand-soft) text-(--brand)"
-                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
-              )}
-            >
-              <Icon className="h-5 w-5 shrink-0" />
-              <span>{label}</span>
-            </a>
-          ))}
-        </nav>
+        <div className="mt-5 flex min-h-0 flex-1 flex-col overflow-hidden">
+          <div className="hide-scrollbar min-h-0 flex-1 overflow-y-auto pr-1">
+            <nav className="space-y-1.5" aria-label="Primary">
+              {primaryNavigation.map(({ label, icon: Icon, active }) => (
+                <a
+                  key={label}
+                  href="#"
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "flex items-center gap-3 rounded-2xl px-4 py-3 text-[0.96rem] font-medium transition",
+                    active
+                      ? "bg-(--brand-soft) text-(--brand)"
+                      : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                  )}
+                >
+                  <Icon className="h-5 w-5 shrink-0" />
+                  <span>{label}</span>
+                </a>
+              ))}
+            </nav>
 
-        <div className="mt-auto">
-          <nav
-            className="space-y-1.5 border-t border-(--line) pt-6"
-            aria-label="Secondary"
-          >
-            {secondaryNavigation.map(({ label, icon: Icon }) => (
-              <a
-                key={label}
-                href="#"
-                className="flex items-center gap-3 rounded-2xl px-4 py-3 text-[0.96rem] font-medium text-slate-500 transition hover:bg-slate-50 hover:text-slate-900"
+            <div className="my-6 ">
+              <nav
+                className="space-y-1.5 border-t border-(--line) pt-6"
+                aria-label="Secondary"
               >
-                <Icon className="h-5 w-5 shrink-0" />
-                <span>{label}</span>
-              </a>
-            ))}
-          </nav>
+                {secondaryNavigation.map(({ label, icon: Icon }) => (
+                  <a
+                    key={label}
+                    href="#"
+                    className="flex items-center gap-3 rounded-2xl px-4 py-3 text-[0.96rem] font-medium text-slate-500 transition hover:bg-slate-50 hover:text-slate-900"
+                  >
+                    <Icon className="h-5 w-5 shrink-0" />
+                    <span>{label}</span>
+                  </a>
+                ))}
+              </nav>
 
-          <div className="mt-5 flex items-center gap-3 rounded-[26px] border border-(--line) bg-(--panel-muted) p-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-blue-500 via-violet-500 to-amber-400 text-sm font-semibold text-white">
-              CS
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-slate-900">
-                Chidinma Snaarp
-              </p>
-              <p className="truncate text-xs text-slate-500">
-                alm.lawso@example.com
-              </p>
+              <div className="mt-5 flex items-center gap-3 rounded-[26px] border border-(--line) bg-(--panel-muted) p-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-blue-500 via-violet-500 to-amber-400 text-sm font-semibold text-white">
+                  CS
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-slate-900">
+                    Chidinma Snaarp
+                  </p>
+                  <p className="truncate text-xs text-slate-500">
+                    alm.lawso@example.com
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
